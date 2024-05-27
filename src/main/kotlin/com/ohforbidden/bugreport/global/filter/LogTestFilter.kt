@@ -1,11 +1,11 @@
+
 import jakarta.servlet.Filter
 import jakarta.servlet.FilterChain
 import jakarta.servlet.FilterConfig
 import jakarta.servlet.ServletRequest
 import jakarta.servlet.ServletResponse
+import jakarta.servlet.http.HttpServletRequest
 import mu.KotlinLogging
-import org.hibernate.query.sqm.tree.SqmNode.log
-import org.springframework.http.HttpRequest
 import java.util.UUID
 
 class LogTestFilter() : Filter {
@@ -15,8 +15,8 @@ class LogTestFilter() : Filter {
     }
 
     override fun doFilter(request: ServletRequest, response: ServletResponse, chain: FilterChain) {
-        val httpRequest = request as HttpRequest
-        val requestUri = httpRequest.uri
+        val httpRequest = request as HttpServletRequest
+        val requestUri = httpRequest.requestURI
         val uuid = UUID.randomUUID().toString()
 
         try {
