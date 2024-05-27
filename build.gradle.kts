@@ -20,14 +20,19 @@ repositories {
 }
 
 dependencies {
+	// DB
+	runtimeOnly("org.mariadb.jdbc:mariadb-java-client")
+
+	implementation("com.fasterxml.jackson.module:jackson-module-kotlin")
+	implementation("org.springframework.boot:spring-boot-starter-web")
 	implementation("org.springframework.boot:spring-boot-starter-data-jpa")
 	implementation("org.springframework.boot:spring-boot-starter-security")
-	implementation("org.springframework.boot:spring-boot-starter-web")
-	implementation("com.fasterxml.jackson.module:jackson-module-kotlin")
 	implementation("org.jetbrains.kotlin:kotlin-reflect")
-	runtimeOnly("org.mariadb.jdbc:mariadb-java-client")
 	testImplementation("org.springframework.boot:spring-boot-starter-test")
 	testImplementation("org.springframework.security:spring-security-test")
+
+	// Logging
+	implementation("io.github.microutils:kotlin-logging-jvm:3.0.5")
 }
 
 tasks.withType<KotlinCompile> {
