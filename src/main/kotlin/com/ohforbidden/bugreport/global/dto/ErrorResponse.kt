@@ -2,7 +2,7 @@ package com.ohforbidden.bugreport.global.dto
 
 import java.time.LocalDateTime
 
-data class ExceptionResult(
+data class ErrorResponse(
     val uuid: String,
     val httpStatus: Int,
     val errorCode: String,
