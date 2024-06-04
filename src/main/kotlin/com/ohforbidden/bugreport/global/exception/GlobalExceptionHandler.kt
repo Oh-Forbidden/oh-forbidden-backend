@@ -88,12 +88,6 @@ class GlobalExceptionHandler(
         return handleBusinessException(BusinessException(CommonErrorType.CONSTRAINT_VIOLATION, e))
     }
 
-    // 타임아웃 에러 처리
-    @ExceptionHandler
-    fun handleTimeOutException(e: SocketTimeoutException): ResponseEntity<ErrorResponse> {
-        return handleBusinessException(BusinessException(CommonErrorType.TIME_OUT, e))
-    }
-
     @ExceptionHandler
     fun optimisticLockFailureException(e: OptimisticLockingFailureException): ResponseEntity<ErrorResponse> {
         return handleBusinessException(BusinessException(CommonErrorType.OPTIMISTIC_LOCK_FAILURE, e))
@@ -102,12 +96,17 @@ class GlobalExceptionHandler(
     // RestClient 에러 처리
     @ExceptionHandler
     fun handleRestClientException(e: RestClientException): ResponseEntity<ErrorResponse> {
-        return handleBusinessException(BusinessException(CommonErrorType.REST_CLIENT_BAD_RESPONSE, e))
+        return handleBusinessException(BusinessException(CommonErrorType.EXTERNAL_API_BAD_RESPONSE, e))
+    }
+
+    @ExceptionHandler
+    fun handleRestClientTimeout(e: SocketTimeoutException): ResponseEntity<ErrorResponse> {
+        return handleBusinessException(BusinessException(CommonErrorType.EXTERNAL_API_TIMEOUT, e))
     }
 
     // 기타 모든 에러 처리
     @ExceptionHandler()
     fun handleException(e: Exception): ResponseEntity<ErrorResponse> {
-        return handleBusinessException(BusinessException(CommonErrorType.UNKNOWN_EXCEPTION, e))
+        return handleBusinessException(BusinessException(CommonErrorType.SERVER_ERROR, e))
     }
 }

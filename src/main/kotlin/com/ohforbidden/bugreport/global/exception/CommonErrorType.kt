@@ -7,8 +7,9 @@ import org.springframework.http.HttpStatus
  * Error Code: 0000 ~ 0999
  * - 두번째 자리 에러코드 지정 규칙
  *   - 0: 잘못된 값 때문에 검증에 실패
- *   - 1: 인증/인가 때문에 오류
+ *   - 1: 인증/인가 오류
  *   - 3: conflict 예외
+ *   - 8: 기타 예외 (Timeout 등)
  *   - 9: 외부 API 또는 내부 서버 에러 처리를 내보낼 때
  */
 enum class CommonErrorType : ErrorType {
@@ -43,15 +44,6 @@ enum class CommonErrorType : ErrorType {
     },
 
     /**
-     * ************* 408 REQUEST_TIMEOUT *************
-     */
-    TIME_OUT {
-        override val httpStatus = HttpStatus.REQUEST_TIMEOUT
-        override val errorCode = "0902"
-        override val message = "External API의 요청시간이 초과하였습니다."
-    },
-
-    /**
      * ************* 409 Conflict *************
      */
     OPTIMISTIC_LOCK_FAILURE {
@@ -61,20 +53,29 @@ enum class CommonErrorType : ErrorType {
     },
 
     /**
+     * ************* 500 Internal Server Error *************
+     */
+    SERVER_ERROR {
+        override val httpStatus = HttpStatus.INTERNAL_SERVER_ERROR
+        override val errorCode = "0999"
+        override val message = "내부 서버 에러가 발생했습니다."
+    },
+
+    /**
      * ************* 502 Bad Gateway *************
      */
-    REST_CLIENT_BAD_RESPONSE {
+    EXTERNAL_API_BAD_RESPONSE {
         override val httpStatus = HttpStatus.BAD_GATEWAY
         override val errorCode = "0901"
         override val message = "External API의 응답 형태가 유효하지 않습니다."
     },
 
     /**
-     * ************* 500 Internal Server Error *************
+     * ************* 504 Gateway Timeout *************
      */
-    UNKNOWN_EXCEPTION {
-        override val httpStatus = HttpStatus.INTERNAL_SERVER_ERROR
-        override val errorCode = "0999"
-        override val message = "내부 서버 에러가 발생했습니다."
+    EXTERNAL_API_TIMEOUT {
+        override val httpStatus = HttpStatus.GATEWAY_TIMEOUT
+        override val errorCode = "0903"
+        override val message = "External API의 요청 시간이 초과되었습니다."
     }
 }
