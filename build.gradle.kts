@@ -22,8 +22,6 @@ repositories {
 }
 
 dependencies {
-	// DB
-	runtimeOnly("org.mariadb.jdbc:mariadb-java-client")
 
 	implementation("com.fasterxml.jackson.module:jackson-module-kotlin")
 	implementation("org.springframework.boot:spring-boot-starter-web")
@@ -32,6 +30,12 @@ dependencies {
 	implementation("org.jetbrains.kotlin:kotlin-reflect")
 	testImplementation("org.springframework.boot:spring-boot-starter-test")
 	testImplementation("org.springframework.security:spring-security-test")
+
+	// DB
+	runtimeOnly("org.mariadb.jdbc:mariadb-java-client")
+
+	// JWT
+	implementation("io.jsonwebtoken:jjwt:0.12.5")
 
 	// Logging
 	implementation("io.github.microutils:kotlin-logging-jvm:3.0.5")
