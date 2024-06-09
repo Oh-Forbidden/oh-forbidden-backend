@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE configuration>
+
+<configuration>
+    <include resource="logback/logback-console.xml"/>
+
+<!--    나중에 프로필 분리할 때 적용 다시 해보기 -->
+<!--    <springProfile name="full-logging">-->
+<!--        <include resource="logback/logback-console.xml" />-->
+<!--        <include resource="logback/logback-file.xml" />-->
+<!--    </springProfile>-->
+
+<!--    <springProfile name="console-logging">-->
+<!--        <include resource="logback/logback-console.xml" />-->
+<!--    </springProfile>-->
+
+<!--    <springProfile name="file-logging">-->
+<!--        <include resource="logback/logback-file.xml" />-->
+<!--    </springProfile>-->
+
+
+</configuration>
