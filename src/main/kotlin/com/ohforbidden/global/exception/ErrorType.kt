@@ -1,4 +1,4 @@
-package com.ohforbidden.bugreport.global.exception
+package com.ohforbidden.global.exception
 
 import org.springframework.http.HttpStatus
 

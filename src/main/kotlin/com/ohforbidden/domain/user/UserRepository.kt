@@ -1,4 +1,4 @@
-package com.ohforbidden.bugreport.domain.user
+package com.ohforbidden.domain.user
 
 import org.springframework.data.jpa.repository.JpaRepository
 

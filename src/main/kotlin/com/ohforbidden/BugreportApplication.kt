@@ -1,4 +1,4 @@
-package com.ohforbidden.bugreport
+package com.ohforbidden
 
 import org.springframework.boot.autoconfigure.SpringBootApplication
 import org.springframework.boot.runApplication

@@ -1,4 +1,4 @@
-package com.ohforbidden.bugreport.global.exception
+package com.ohforbidden.global.exception
 
 class BusinessException(
     val errorType: ErrorType,

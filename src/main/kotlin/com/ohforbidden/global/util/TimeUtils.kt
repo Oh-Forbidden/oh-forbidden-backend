@@ -1,4 +1,4 @@
-package com.ohforbidden.bugreport.global.util
+package com.ohforbidden.global.util
 
 import java.time.ZoneOffset
 import java.time.ZonedDateTime

@@ -1,7 +1,7 @@
-package com.ohforbidden.bugreport.global.exception
+package com.ohforbidden.global.exception
 
-import com.ohforbidden.bugreport.global.dto.ErrorResponse
-import com.ohforbidden.bugreport.global.util.createUtcDateTime
+import com.ohforbidden.global.dto.ErrorResponse
+import com.ohforbidden.global.util.createUtcDateTime
 import mu.KotlinLogging
 import org.hibernate.exception.ConstraintViolationException
 import org.slf4j.MDC

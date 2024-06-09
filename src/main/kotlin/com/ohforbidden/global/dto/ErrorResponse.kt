@@ -1,6 +1,6 @@
-package com.ohforbidden.bugreport.global.dto
+package com.ohforbidden.global.dto
 
-import com.ohforbidden.bugreport.global.util.createUtcDateTime
+import com.ohforbidden.global.util.createUtcDateTime
 import java.time.ZonedDateTime
 
 data class ErrorResponse(

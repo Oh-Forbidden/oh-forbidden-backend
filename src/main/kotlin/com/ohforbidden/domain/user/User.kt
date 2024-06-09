@@ -1,4 +1,4 @@
-package com.ohforbidden.bugreport.domain.user
+package com.ohforbidden.domain.user
 
 import jakarta.persistence.Entity
 import jakarta.persistence.GeneratedValue
