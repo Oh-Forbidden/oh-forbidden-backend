@@ -1,6 +1,7 @@
 package com.ohforbidden.bugreport.global.exception
 
 import com.ohforbidden.bugreport.global.dto.ErrorResponse
+import com.ohforbidden.bugreport.global.util.createUtcDateTime
 import mu.KotlinLogging
 import org.hibernate.exception.ConstraintViolationException
 import org.slf4j.MDC
@@ -16,7 +17,6 @@ import org.springframework.web.context.request.ServletRequestAttributes
 import org.springframework.web.util.ContentCachingRequestWrapper
 import org.yaml.snakeyaml.util.UriEncoder
 import java.net.SocketTimeoutException
-import java.time.LocalDateTime
 
 @RestControllerAdvice
 class GlobalExceptionHandler(
@@ -36,7 +36,7 @@ class GlobalExceptionHandler(
     }
 
     private fun logError(e: Exception, headerMessage: String, errorType: ErrorType): ErrorResponse {
-        val time = LocalDateTime.now()
+        val time = createUtcDateTime()
 
         val requestAttributes = RequestContextHolder.getRequestAttributes()
         val request = (requestAttributes as ServletRequestAttributes).request as ContentCachingRequestWrapper
@@ -56,8 +56,8 @@ class GlobalExceptionHandler(
             -RequestURI = ${UriEncoder.decode(request.requestURI)}
             -RequestMethod = ${request.method}
             -RequestParam = $params
-            -RequestBody = ${String(request.contentAsByteArray)}
             -RequestHeader = ${request.headerNames.toList().joinToString(",") { "$it = ${request.getHeader(it)}" }}
+            -RequestBody = ${String(request.contentAsByteArray)}
             ▼▼▼▼▼▼▼▼▼▼▼▼▼▼STACK TRACE▼▼▼▼▼▼▼▼▼▼▼▼▼▼
             """.trimIndent()
         }
@@ -67,7 +67,7 @@ class GlobalExceptionHandler(
             errorType.httpStatus.value(),
             errorType.errorCode,
             errorType.message,
-            LocalDateTime.now()
+            createUtcDateTime()
         )
     }
 
