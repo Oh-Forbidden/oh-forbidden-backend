@@ -1,4 +1,4 @@
-package com.ohforbidden.bugreport.global.filter
+package com.ohforbidden.global.filter
 
 import jakarta.servlet.Filter
 import jakarta.servlet.FilterChain

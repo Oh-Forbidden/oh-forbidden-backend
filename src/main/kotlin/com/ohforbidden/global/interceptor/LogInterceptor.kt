@@ -1,4 +1,4 @@
-package com.ohforbidden.bugreport.global.interceptor
+package com.ohforbidden.global.interceptor
 
 import jakarta.servlet.http.HttpServletRequest
 import jakarta.servlet.http.HttpServletResponse
