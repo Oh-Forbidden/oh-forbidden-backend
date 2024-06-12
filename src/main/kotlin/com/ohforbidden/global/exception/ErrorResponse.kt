@@ -1,4 +1,4 @@
-package com.ohforbidden.global.dto
+package com.ohforbidden.global.exception
 
 import com.ohforbidden.global.util.createUtcDateTime
 import java.time.ZonedDateTime
