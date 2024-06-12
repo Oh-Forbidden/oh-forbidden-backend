@@ -1,6 +1,5 @@
 package com.ohforbidden.global.exception
 
-import com.ohforbidden.global.dto.ErrorResponse
 import com.ohforbidden.global.util.createUtcDateTime
 import mu.KotlinLogging
 import org.hibernate.exception.ConstraintViolationException
