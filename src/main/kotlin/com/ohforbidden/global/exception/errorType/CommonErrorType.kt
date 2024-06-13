@@ -1,5 +1,6 @@
-package com.ohforbidden.global.exception
+package com.ohforbidden.global.exception.errorType
 
+import com.ohforbidden.global.exception.ErrorType
 import org.springframework.http.HttpStatus
 
 /**
@@ -39,7 +40,7 @@ enum class CommonErrorType : ErrorType {
      */
     NO_AUTHORIZATION {
         override val httpStatus = HttpStatus.UNAUTHORIZED
-        override val errorCode = "0103"
+        override val errorCode = "0101"
         override val message = "해당 요청에 대한 권한이 존재하지 않습니다."
     },
 

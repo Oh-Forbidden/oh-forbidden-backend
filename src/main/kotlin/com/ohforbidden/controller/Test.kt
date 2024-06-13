@@ -1,7 +1,7 @@
 package com.ohforbidden.controller
 
 import com.ohforbidden.global.exception.BusinessException
-import com.ohforbidden.global.exception.CommonErrorType
+import com.ohforbidden.global.exception.errorType.CommonErrorType
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RestController
