@@ -14,7 +14,7 @@ enum class JwtErrorType : ErrorType {
         override val message = "토큰이 필요합니다."
     },
 
-    // SignatureException, MalformedJwtException
+    // SignatureException, MalformedJwtException, JwtException
     INVALID_TOKEN {
         override val httpStatus = HttpStatus.UNAUTHORIZED
         override val errorCode = "1102"
@@ -26,12 +26,5 @@ enum class JwtErrorType : ErrorType {
         override val httpStatus = HttpStatus.UNAUTHORIZED
         override val errorCode = "1103"
         override val message = "토큰이 만료되었습니다."
-    },
-
-    // JwtException
-    TOKEN_ERROR {
-        override val httpStatus = HttpStatus.UNAUTHORIZED
-        override val errorCode = "1104"
-        override val message = "토큰 오류가 발생했습니다."
     }
 }

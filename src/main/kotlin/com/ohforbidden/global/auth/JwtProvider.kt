@@ -1,27 +1,26 @@
 package com.ohforbidden.global.auth
 
-import com.ohforbidden.global.exception.BusinessException
+import com.ohforbidden.global.exception.AuthException
 import com.ohforbidden.global.exception.errorType.CommonErrorType
 import com.ohforbidden.global.exception.errorType.JwtErrorType
 import io.jsonwebtoken.Claims
-import io.jsonwebtoken.ExpiredJwtException
 import io.jsonwebtoken.JwtException
 import io.jsonwebtoken.Jwts
-import io.jsonwebtoken.MalformedJwtException
+import io.jsonwebtoken.UnsupportedJwtException
+import jakarta.servlet.http.HttpServletRequest
 import org.hibernate.boot.model.naming.IllegalIdentifierException
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.stereotype.Component
 import java.security.KeyFactory
 import java.security.PrivateKey
 import java.security.PublicKey
-import java.security.SignatureException
 import java.security.spec.PKCS8EncodedKeySpec
 import java.security.spec.X509EncodedKeySpec
 import java.util.Base64
 import java.util.Date
 
 @Component
-class JwtManager(
+class JwtProvider(
     @Value("\${jwt.access.private}")
     private val accessPrivateRsa: String,
 
@@ -47,7 +46,16 @@ class JwtManager(
     private val refreshPublicKey = createPublicKey(refreshPublicRsa)
 
     fun createAccessToken(claims: JwtClaims): String = createJwt(TokenType.ACCESS, claims)
+
     fun createRefreshToken(claims: JwtClaims): String = createJwt(TokenType.REFRESH, claims)
+
+    fun resolveAccessToken(req: HttpServletRequest): String {
+        return req.getHeader(TokenType.ACCESS.subject) ?: throw AuthException(JwtErrorType.NO_TOKEN)
+    }
+
+    fun resolveRefreshToken(req: HttpServletRequest): String {
+        return req.getHeader(TokenType.REFRESH.subject) ?: throw AuthException(JwtErrorType.NO_TOKEN)
+    }
 
     fun getPayload(token: String, type: TokenType): Claims {
         val publicKey = when (type) {
@@ -55,18 +63,19 @@ class JwtManager(
             TokenType.REFRESH -> refreshPublicKey
         }
 
-        try {
-            return Jwts.parser().verifyWith(publicKey).build().parseSignedClaims(token).payload
-        } catch (e: ExpiredJwtException) {
-            throw BusinessException(JwtErrorType.EXPIRED_TOKEN, e)
-        } catch (e: SignatureException) {
-            throw BusinessException(JwtErrorType.INVALID_TOKEN, e)
-        } catch (e: MalformedJwtException) {
-            throw BusinessException(JwtErrorType.INVALID_TOKEN, e)
+        return try {
+            Jwts.parser()
+                .verifyWith(publicKey)
+                .build()
+                .parseSignedClaims(token)
+                .payload
+                .also { validateExpiration(it) }
+        } catch (e: UnsupportedJwtException) {
+            throw AuthException(JwtErrorType.INVALID_TOKEN, e)
         } catch (e: JwtException) {
-            throw BusinessException(JwtErrorType.TOKEN_ERROR, e)
+            throw AuthException(JwtErrorType.INVALID_TOKEN, e)
         } catch (e: IllegalIdentifierException) {
-            throw BusinessException(CommonErrorType.INVALID_ARGUMENT, e)
+            throw AuthException(CommonErrorType.INVALID_ARGUMENT, e)
         }
     }
 
@@ -77,13 +86,14 @@ class JwtManager(
         }
 
         return Jwts.builder()
-            .subject(TokenType.ACCESS.name)
+            .subject(TokenType.ACCESS.subject)
             .header().add("typ", "JWT").and()
             .issuedAt(Date(System.currentTimeMillis()))
+            .issuer("oh-forbidden")
             .expiration(expirationDate)
             .claim("userId", claims.userId) // 회원 아이디
-            .claim("authType", claims.authType)
-            .signWith(privateKey, Jwts.SIG.RS512) // 암호화가 더 중요하기 때문에 privateKey로 암호화
+            .claim("role", claims.role)
+            .signWith(privateKey, Jwts.SIG.RS512) // privateKey로 암호화
             .compact()
     }
 
@@ -99,6 +109,12 @@ class JwtManager(
         return keyFactory.generatePrivate(keySpecPKCS8)
     }
 
+    private fun validateExpiration(payload: Claims) {
+        val isExpired = payload.expiration.after(Date(System.currentTimeMillis()))
+        if (isExpired) throw AuthException(JwtErrorType.EXPIRED_TOKEN)
+    }
+
     private fun parseRsaToByteArray(rsa: String) = Base64.getDecoder().decode(rsa)
+
     private fun createJwtExpirationDate(period: Long) = Date(System.currentTimeMillis() + period)
 }

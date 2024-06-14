@@ -1,3 +1,5 @@
 package com.ohforbidden.global.auth
 
-class JwtManagerTest() {}
+enum class Role {
+    ADMIN, USER
+}

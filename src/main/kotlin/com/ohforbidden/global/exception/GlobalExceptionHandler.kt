@@ -105,7 +105,7 @@ class GlobalExceptionHandler(
     }
 
     // 기타 모든 에러 처리
-    @ExceptionHandler()
+    @ExceptionHandler
     fun handleException(e: Exception): ResponseEntity<ErrorResponse> {
         return handleBusinessException(BusinessException(CommonErrorType.SERVER_ERROR, e))
     }
