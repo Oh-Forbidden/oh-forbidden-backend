@@ -27,7 +27,6 @@ class SecurityConfig(
     private val jwtAuthenticationFilter: JwtAuthenticationFilter,
     private val jwtProvider: JwtProvider,
     private val authenticationConfiguration: AuthenticationConfiguration
-//    private val customUserDetailsService: CustomUserDetailsService
 ) {
     @Bean
     fun filterChain(http: HttpSecurity): DefaultSecurityFilterChain {
@@ -67,15 +66,6 @@ class SecurityConfig(
         return source
     }
 
-//    @Bean
-//    fun jwtAuthenticationFilter(): JwtAuthenticationFilter {
-//        return JwtAuthenticationFilter(jwtProvider, customUserDetailsService)
-//    }
-
-//    @Bean
-//    fun authenticationManager(http: HttpSecurity): AuthenticationManager {
-//        return http.getSharedObject(AuthenticationConfiguration::class.java).authenticationManager
-//    }
     @Bean
     fun authenticationManager(): AuthenticationManager {
         return authenticationConfiguration.authenticationManager

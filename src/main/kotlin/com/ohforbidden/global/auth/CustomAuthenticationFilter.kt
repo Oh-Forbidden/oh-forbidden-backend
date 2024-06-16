@@ -31,8 +31,8 @@ class CustomAuthenticationFilter(
         val userDetails = authResult.principal as UserDetails
         val userId = 1L // TODO: 나중에 Repository에서 가져오는 코드 추가
         val email = userDetails.username
-        val auth = userDetails.authorities.map { "ROLE_${it.authority}" }.joinToString(",")
-        val role = Role.valueOf(auth)
+        val auth = userDetails.authorities.map { "${it.authority}" }.joinToString(",")
+        val role = getRoleByAuth(auth)
         val claims = JwtClaims(userId, email, role)
         val accessToken = jwtProvider.createAccessToken(claims)
         val refreshToken = jwtProvider.createRefreshToken(claims) // 리프레시 토큰 로직 추가 가능

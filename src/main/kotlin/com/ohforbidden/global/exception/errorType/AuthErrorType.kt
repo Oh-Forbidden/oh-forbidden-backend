@@ -61,5 +61,12 @@ enum class AuthErrorType : ErrorType {
         override val httpStatus = HttpStatus.BAD_REQUEST
         override val errorCode = "1102"
         override val message = "비밀번호가 일치하지 않습니다."
+    },
+
+    NOT_FOUND_ROLE_BY_AUTH {
+        override val httpStatus = HttpStatus.NOT_FOUND
+        override val errorCode = "1103"
+        override val message = "ROLE을 특정할 수 없습니다."
     }
+
 }

@@ -26,7 +26,7 @@ class CustomAuthenticationProvider(
         val userDetails = userDetailsService.loadUserByUsername(email)
 
         // 비밀번호 검증
-        if (encoder.encode(password) != userDetails.password) {
+        if (!encoder.matches(password, userDetails.password)) {
             throw AuthException(AuthErrorType.INVALID_PASSWORD)
         }
 
