@@ -35,6 +35,17 @@ class GlobalExceptionHandler(
         return ResponseEntity.status(e.errorType.httpStatus).body(errorResponseDto)
     }
 
+    @ExceptionHandler
+    fun handleAuthException(e: AuthException): ResponseEntity<ErrorResponse> {
+        val errorResponseDto = logError(
+            e,
+            "============= AuthException 로깅 시작(ErrorCode: ${e.errorType.errorCode}) =============",
+            e.errorType
+        )
+
+        return ResponseEntity.status(e.errorType.httpStatus).body(errorResponseDto)
+    }
+
     private fun logError(e: Exception, headerMessage: String, errorType: ErrorType): ErrorResponse {
         val time = createUtcDateTime()
 

@@ -1,8 +1,7 @@
 package com.ohforbidden.global.auth
 
 import com.ohforbidden.global.exception.AuthException
-import com.ohforbidden.global.exception.errorType.CommonErrorType
-import com.ohforbidden.global.exception.errorType.JwtErrorType
+import com.ohforbidden.global.exception.errorType.AuthErrorType
 import io.jsonwebtoken.Claims
 import io.jsonwebtoken.JwtException
 import io.jsonwebtoken.Jwts
@@ -49,21 +48,25 @@ class JwtProvider(
 
     fun createRefreshToken(claims: JwtClaims): String = createJwt(TokenType.REFRESH, claims)
 
-    fun resolveAccessToken(req: HttpServletRequest): String {
-        return req.getHeader(TokenType.ACCESS.subject) ?: throw AuthException(JwtErrorType.NO_TOKEN)
+    fun resolveAccessToken(request: HttpServletRequest): String {
+        val authHeader = request.getHeader("Authorization") ?: throw AuthException(AuthErrorType.NO_TOKEN)
+        val token = if (authHeader.startsWith("Bearer ")) {
+            authHeader.substring(7)
+        } else {
+            throw AuthException(AuthErrorType.INVALID_BEARER_TOKEN_FORMAT)
+        }
+
+        return getPayload(token, TokenType.ACCESS).let { token }
+
     }
 
-    fun resolveRefreshToken(req: HttpServletRequest): String {
-        return req.getHeader(TokenType.REFRESH.subject) ?: throw AuthException(JwtErrorType.NO_TOKEN)
-    }
-
-    fun getPayload(token: String, type: TokenType): Claims {
+    fun getPayload(token: String, type: TokenType): JwtClaims {
         val publicKey = when (type) {
             TokenType.ACCESS -> accessPublicKey
             TokenType.REFRESH -> refreshPublicKey
         }
 
-        return try {
+        val claims = try {
             Jwts.parser()
                 .verifyWith(publicKey)
                 .build()
@@ -71,12 +74,18 @@ class JwtProvider(
                 .payload
                 .also { validateExpiration(it) }
         } catch (e: UnsupportedJwtException) {
-            throw AuthException(JwtErrorType.INVALID_TOKEN, e)
+            throw AuthException(AuthErrorType.INVALID_TOKEN, e)
         } catch (e: JwtException) {
-            throw AuthException(JwtErrorType.INVALID_TOKEN, e)
+            throw AuthException(AuthErrorType.INVALID_TOKEN, e)
         } catch (e: IllegalIdentifierException) {
-            throw AuthException(CommonErrorType.INVALID_ARGUMENT, e)
+            throw AuthException(AuthErrorType.NULL_OR_EMPTY_TOKEN_STRING, e)
         }
+
+        return JwtClaims(
+            userId = claims.get("userId", Long::class.java),
+            email = claims.get("email", String::class.java),
+            role = Role.valueOf(claims.get("role", String::class.java))
+        )
     }
 
     private fun createJwt(type: TokenType, claims: JwtClaims): String {
@@ -111,7 +120,7 @@ class JwtProvider(
 
     private fun validateExpiration(payload: Claims) {
         val isExpired = payload.expiration.after(Date(System.currentTimeMillis()))
-        if (isExpired) throw AuthException(JwtErrorType.EXPIRED_TOKEN)
+        if (isExpired) throw AuthException(AuthErrorType.EXPIRED_TOKEN)
     }
 
     private fun parseRsaToByteArray(rsa: String) = Base64.getDecoder().decode(rsa)
