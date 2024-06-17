@@ -24,9 +24,9 @@ import org.springframework.web.cors.UrlBasedCorsConfigurationSource
 @EnableWebSecurity
 class SecurityConfig(
     private val customAuthenticationProvider: CustomAuthenticationProvider,
+    private val authenticationConfiguration: AuthenticationConfiguration,
     private val jwtAuthenticationFilter: JwtAuthenticationFilter,
-    private val jwtProvider: JwtProvider,
-    private val authenticationConfiguration: AuthenticationConfiguration
+    private val jwtProvider: JwtProvider
 ) {
     @Bean
     fun filterChain(http: HttpSecurity): DefaultSecurityFilterChain {

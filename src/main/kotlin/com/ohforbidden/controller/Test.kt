@@ -9,13 +9,23 @@ import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RestController
 
 @RestController
-@RequestMapping("/auth/test")
+@RequestMapping
 class Test(private val jwtProvider: JwtProvider) {
-    @GetMapping("/tokens")
+    @GetMapping("/auth/test/tokens")
     fun getTokens(): LoginResponse {
-        val jwtClaims = JwtClaims(1, "test@example.com", Role.USER)
+        val jwtClaims = JwtClaims(1L, "test@example.com", Role.USER)
         val accessToken = jwtProvider.createAccessToken(jwtClaims)
         val refreshToken = jwtProvider.createRefreshToken(jwtClaims)
         return LoginResponse(accessToken, refreshToken)
+    }
+
+    @GetMapping("/test/token/auth")
+    fun testTokenAuth(): String {
+        return "Token authentication success!!"
+    }
+
+    @GetMapping("/admin/token/auth")
+    fun adminTokenAuth(): String {
+        return "Admin Token authentication success!!"
     }
 }

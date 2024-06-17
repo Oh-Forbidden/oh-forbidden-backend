@@ -1,6 +1,5 @@
 package com.ohforbidden.global.auth
 
-import com.ohforbidden.global.exception.AuthException
 import jakarta.servlet.FilterChain
 import jakarta.servlet.http.HttpServletRequest
 import jakarta.servlet.http.HttpServletResponse
@@ -24,11 +23,7 @@ class JwtAuthenticationFilter(
             return
         }
 
-        val jwtToken = try { jwtProvider.resolveAccessToken(request)
-        } catch (e: AuthException) {
-            response.sendError(HttpServletResponse.SC_UNAUTHORIZED, e.message)
-            return
-        }
+        val jwtToken = jwtProvider.resolveAccessToken(request)
         val payload = jwtProvider.getPayload(jwtToken, TokenType.ACCESS)
         val userDetails = customUserDetailsService.loadUserByUsername(payload.email)
         val authentication =

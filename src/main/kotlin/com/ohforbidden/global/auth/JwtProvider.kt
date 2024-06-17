@@ -50,14 +50,11 @@ class JwtProvider(
 
     fun resolveAccessToken(request: HttpServletRequest): String {
         val authHeader = request.getHeader("Authorization") ?: throw AuthException(AuthErrorType.NO_TOKEN)
-        val token = if (authHeader.startsWith("Bearer ")) {
+        return if (authHeader.startsWith("Bearer ")) {
             authHeader.substring(7)
         } else {
             throw AuthException(AuthErrorType.INVALID_BEARER_TOKEN_FORMAT)
         }
-
-        return getPayload(token, TokenType.ACCESS).let { token }
-
     }
 
     fun getPayload(token: String, type: TokenType): JwtClaims {
@@ -82,7 +79,7 @@ class JwtProvider(
         }
 
         return JwtClaims(
-            userId = claims.get("userId", Long::class.java),
+            userId = claims["userId", Integer::class.java].toLong(),
             email = claims.get("email", String::class.java),
             role = Role.valueOf(claims.get("role", String::class.java))
         )
@@ -100,7 +97,8 @@ class JwtProvider(
             .issuedAt(Date(System.currentTimeMillis()))
             .issuer("oh-forbidden")
             .expiration(expirationDate)
-            .claim("userId", claims.userId) // 회원 아이디
+            .claim("userId", claims.userId)
+            .claim("email", claims.email)
             .claim("role", claims.role)
             .signWith(privateKey, Jwts.SIG.RS512) // privateKey로 암호화
             .compact()
@@ -119,7 +117,7 @@ class JwtProvider(
     }
 
     private fun validateExpiration(payload: Claims) {
-        val isExpired = payload.expiration.after(Date(System.currentTimeMillis()))
+        val isExpired = payload.expiration.before(Date(System.currentTimeMillis()))
         if (isExpired) throw AuthException(AuthErrorType.EXPIRED_TOKEN)
     }
 
