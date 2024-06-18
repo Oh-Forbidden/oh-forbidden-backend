@@ -1,6 +1,6 @@
 package com.ohforbidden.global.exception
 
-import com.ohforbidden.global.dto.ErrorResponse
+import com.ohforbidden.global.exception.errorType.CommonErrorType
 import com.ohforbidden.global.util.createUtcDateTime
 import mu.KotlinLogging
 import org.hibernate.exception.ConstraintViolationException
@@ -29,6 +29,17 @@ class GlobalExceptionHandler(
         val errorResponseDto = logError(
             e,
             "============= BusinessException 로깅 시작(ErrorCode: ${e.errorType.errorCode}) =============",
+            e.errorType
+        )
+
+        return ResponseEntity.status(e.errorType.httpStatus).body(errorResponseDto)
+    }
+
+    @ExceptionHandler
+    fun handleAuthException(e: AuthException): ResponseEntity<ErrorResponse> {
+        val errorResponseDto = logError(
+            e,
+            "============= AuthException 로깅 시작(ErrorCode: ${e.errorType.errorCode}) =============",
             e.errorType
         )
 
@@ -105,7 +116,7 @@ class GlobalExceptionHandler(
     }
 
     // 기타 모든 에러 처리
-    @ExceptionHandler()
+    @ExceptionHandler
     fun handleException(e: Exception): ResponseEntity<ErrorResponse> {
         return handleBusinessException(BusinessException(CommonErrorType.SERVER_ERROR, e))
     }

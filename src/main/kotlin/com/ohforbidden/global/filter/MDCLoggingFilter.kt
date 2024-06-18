@@ -14,10 +14,10 @@ import java.util.UUID
 class MDCLoggingFilter() : Filter {
     private val log = KotlinLogging.logger{}
 
-    override fun doFilter(request: ServletRequest, response: ServletResponse, filterChain: FilterChain) {
+    override fun doFilter(request: ServletRequest, response: ServletResponse, chain: FilterChain) {
         val logId = UUID.randomUUID().toString()
         MDC.put("LOG_ID", logId)
-        filterChain.doFilter(request, response)
+        chain.doFilter(request, response)
         MDC.clear()
     }
 }
