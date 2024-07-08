@@ -41,6 +41,10 @@ dependencies {
 
 	// Logging
 	implementation("io.github.microutils:kotlin-logging-jvm:3.0.5")
+
+	// Slack
+	implementation("com.slack.api:slack-api-model-kotlin-extension:1.40.2")
+	implementation("com.slack.api:slack-api-client-kotlin-extension:1.40.2")
 }
 
 tasks.withType<KotlinCompile> {

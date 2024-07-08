@@ -58,7 +58,6 @@ class GlobalExceptionHandler(
         log.error(e) {
 //            -Token = ${authContextThreadLocal.get() ?: ""}
             """
-            
             $headerMessage
 
             ============= Request 정보 =============
