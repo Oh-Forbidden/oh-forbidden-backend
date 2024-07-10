@@ -47,6 +47,12 @@ dependencies {
 	implementation("com.slack.api:slack-api-client-kotlin-extension:1.40.2")
 }
 
+allOpen {
+	annotation("javax.persistence.Entity")
+	annotation("javax.persistence.MappedSuperclass")
+	annotation("javax.persistence.Embeddable")
+}
+
 tasks.withType<KotlinCompile> {
 	kotlinOptions {
 		freeCompilerArgs += "-Xjsr305=strict"
