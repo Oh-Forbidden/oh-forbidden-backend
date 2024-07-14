@@ -17,23 +17,27 @@ import java.util.Objects
 @MappedSuperclass // Entity가 일반 클래스인 BaseEntity를 상속할 수 있도록 설정
 @EntityListeners(AuditingEntityListener::class) // 자동 생성 기능 활성화 (생성일, 수정일 등)
 abstract class BaseEntity : Persistable<Long> {
+    // id는 DB에서 생성되므로 0으로 초기화, 이후 DB에서 재생성해줌 -> val 사용
+    // 하지만 @CreateDate, LastModifiedDate는 영속화 시점에 어플리케이션에서 생성 -> var 사용 (val는 에러 발생)
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    var id: Long = 0L // auto increment로 PK 지정
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    val id: Long = 0L // auto increment로 PK 지정
 
-    @Column(nullable = false, updatable = false)
+    @Column(nullable = true, updatable = false)
     @CreatedDate
     var createdAt: LocalDateTime = LocalDateTime.MIN
+        protected set
 
-    @Column(nullable = false, updatable = true)
+    @Column(nullable = true, updatable = true)
     @LastModifiedDate
     var updatedAt: LocalDateTime = LocalDateTime.MIN
+        protected set
 
 //    @Transient
 //    private var _isNew = true
 
     override fun getId(): Long = id
-    override fun isNew(): Boolean = if (id == 0L) true else false
+    override fun isNew(): Boolean = id == 0L
     override fun hashCode(): Int = Objects.hashCode(id)
 
     override fun equals(other: Any?): Boolean {
@@ -41,7 +45,7 @@ abstract class BaseEntity : Persistable<Long> {
             return false
         }
 
-        if (other !is HibernateProxy && this::class != other::class) {
+        if (this::class != other::class) {
             return false
         }
 
@@ -52,7 +56,7 @@ abstract class BaseEntity : Persistable<Long> {
         return if (obj is HibernateProxy) {
             obj.hibernateLazyInitializer.identifier
         } else {
-            (obj as com.ohforbidden.bugreport.domain.common.BaseEntity).id
+            (obj as BaseEntity).id
         }
     }
 

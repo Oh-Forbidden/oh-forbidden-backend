@@ -1,6 +1,6 @@
 package com.ohforbidden.bugreport.global.exception.errorType
 
-import com.ohforbidden.global.exception.ErrorType
+import com.ohforbidden.bugreport.global.exception.ErrorType
 import org.springframework.http.HttpStatus
 
 /**

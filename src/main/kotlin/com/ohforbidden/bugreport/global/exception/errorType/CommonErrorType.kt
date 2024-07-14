@@ -1,6 +1,6 @@
 package com.ohforbidden.bugreport.global.exception.errorType
 
-import com.ohforbidden.global.exception.ErrorType
+import com.ohforbidden.bugreport.global.exception.ErrorType
 import org.springframework.http.HttpStatus
 
 /**
@@ -49,7 +49,7 @@ enum class CommonErrorType : ErrorType {
      */
     OPTIMISTIC_LOCK_FAILURE {
         override val httpStatus = HttpStatus.CONFLICT
-        override val errorCode = "0304"
+        override val errorCode = "0301"
         override val message = "선행 작업으로 인해 요청을 처리할 수 없습니다."
     },
 

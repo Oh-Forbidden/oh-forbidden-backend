@@ -1,6 +1,6 @@
 package com.ohforbidden.bugreport.global.config
 
-import com.ohforbidden.global.filter.MDCLoggingFilter
+import com.ohforbidden.bugreport.global.filter.MDCLoggingFilter
 import jakarta.servlet.Filter
 import org.springframework.boot.web.servlet.FilterRegistrationBean
 import org.springframework.context.annotation.Bean

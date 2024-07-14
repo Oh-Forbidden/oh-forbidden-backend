@@ -1,8 +1,9 @@
 package com.ohforbidden.bugreport.global.auth
 
-import com.ohforbidden.global.exception.AuthException
-import com.ohforbidden.global.exception.errorType.AuthErrorType
+import com.ohforbidden.bugreport.global.exception.AuthException
+import com.ohforbidden.bugreport.global.exception.errorType.AuthErrorType
 import io.jsonwebtoken.Claims
+import io.jsonwebtoken.ExpiredJwtException
 import io.jsonwebtoken.JwtException
 import io.jsonwebtoken.Jwts
 import io.jsonwebtoken.UnsupportedJwtException
@@ -69,7 +70,8 @@ class JwtProvider(
                 .build()
                 .parseSignedClaims(token)
                 .payload
-                .also { validateExpiration(it) }
+        } catch (e: ExpiredJwtException) {
+            throw AuthException(AuthErrorType.EXPIRED_TOKEN, e)
         } catch (e: UnsupportedJwtException) {
             throw AuthException(AuthErrorType.INVALID_TOKEN, e)
         } catch (e: JwtException) {

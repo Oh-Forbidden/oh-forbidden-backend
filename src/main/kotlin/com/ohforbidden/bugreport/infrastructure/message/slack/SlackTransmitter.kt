@@ -1,7 +1,7 @@
 package com.ohforbidden.bugreport.infrastructure.message.slack
 
-import com.ohforbidden.global.util.toMap
-import com.ohforbidden.infrastructure.message.slack.dto.SignUpParam
+import com.ohforbidden.bugreport.global.util.toMap
+import com.ohforbidden.bugreport.infrastructure.message.slack.dto.SignUpParam
 import com.slack.api.Slack
 import com.slack.api.model.kotlin_extension.block.dsl.LayoutBlockDsl
 import com.slack.api.model.kotlin_extension.block.withBlocks

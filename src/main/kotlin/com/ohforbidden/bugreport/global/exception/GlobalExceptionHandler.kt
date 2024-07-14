@@ -1,6 +1,6 @@
 package com.ohforbidden.bugreport.global.exception
 
-import com.ohforbidden.global.exception.errorType.CommonErrorType
+import com.ohforbidden.bugreport.global.exception.errorType.CommonErrorType
 import mu.KotlinLogging
 import org.hibernate.exception.ConstraintViolationException
 import org.slf4j.MDC

@@ -1,9 +1,9 @@
 package com.ohforbidden.bugreport.global.config
 
 import com.ohforbidden.bugreport.global.auth.CustomAuthenticationFilter
-import com.ohforbidden.global.auth.CustomAuthenticationProvider
-import com.ohforbidden.global.auth.JwtAuthenticationFilter
-import com.ohforbidden.global.auth.JwtProvider
+import com.ohforbidden.bugreport.global.auth.CustomAuthenticationProvider
+import com.ohforbidden.bugreport.global.auth.JwtAuthenticationFilter
+import com.ohforbidden.bugreport.global.auth.JwtProvider
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 import org.springframework.security.authentication.AuthenticationManager

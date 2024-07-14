@@ -15,11 +15,11 @@ class CustomUserDetailsService(private val encoder: BCryptPasswordEncoder) : Use
     override fun loadUserByUsername(email: String): UserDetails {
         // 임시 유저 생성. 추후에 DB에서 User 읽어오기
         val user = User(
-            id = 1,
             email = "user",
             password = encoder.encode("1234"),
             nickname = "loginTestUser",
-            role = Role.USER
+            role = Role.USER,
+            imageUrl = "http://just.test.com",
         ) // ?: AuthException(AuthErrorType.NOT_REGISTERED_EMAIL)
         val authorities = user.role.auth.split(",").map { SimpleGrantedAuthority(it) }
         return org.springframework.security.core.userdetails.User(

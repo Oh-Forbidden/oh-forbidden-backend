@@ -1,7 +1,8 @@
 package com.ohforbidden.bugreport.global.auth
 
-import com.ohforbidden.global.exception.AuthException
-import com.ohforbidden.global.exception.errorType.AuthErrorType
+import com.ohforbidden.bugreport.global.exception.AuthException
+import com.ohforbidden.bugreport.global.exception.errorType.AuthErrorType
+
 
 enum class Role(val auth: String) {
     USER("ROLE_USER"),
